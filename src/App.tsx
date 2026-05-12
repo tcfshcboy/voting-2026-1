@@ -140,43 +140,71 @@ export default function App() {
     });
   };
 
-  // 🌟 Google Login Initialization (結合舊版的穩定機制)
-  useEffect(() => {
+  // 🌟 Google Login Initialization 
+useEffect(() => {
+  let retryTimer: number;
+
+  const initializeGoogle = () => {
+    // 檢查腳本是否載入、是否在正確步驟、以及 ID 是否已設定
     if (step === 2 && !user && window.google?.accounts?.id) {
+      
+      // 檢查是否仍為預設 ID (若在 GitHub Pages 部署，請確保 Secret 已設定)
+      if (GOOGLE_CLIENT_ID.includes("YOUR_CLIENT_ID")) {
+        console.warn("Google Client ID 尚未設定，請檢查環境變數。");
+        return;
+      }
+
       try {
         window.google.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
           callback: (res: any) => {
-            const decoded = decodeJwt(res.credential);
-            if (decoded) {
-              setUser({ 
-                email: decoded.email, 
-                name: decoded.name, 
-                picture: decoded.picture, 
-                credential: res.credential 
-              });
-            }
-          },
-          auto_select: false,
-          cancel_on_tap_outside: true
+            // ... 原有的 JWT 解碼邏輯 ...
+            const base64Url = res.credential.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
+              '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            ).join(''));
+            const payload = JSON.parse(jsonPayload);
+            
+            setUser({ 
+              email: payload.email, 
+              name: payload.name, 
+              picture: payload.picture, 
+              credential: res.credential 
+            });
+          }
         });
 
-        // 放棄 useRef，改用舊版的 getElementById 確保抓取正確圖層
         const btnDiv = document.getElementById("google-signin-btn");
         if (btnDiv) {
-          btnDiv.innerHTML = '';
+          btnDiv.innerHTML = ''; // 清除舊按鈕防止重複渲染
           window.google.accounts.id.renderButton(btnDiv, { 
             theme: "filled_black", 
             size: "large", 
             shape: "pill", 
             width: "300" 
           });
+          // 成功掛載後清除定時器
+          if (retryTimer) clearInterval(retryTimer);
         }
-      } catch (e) {
-        console.error("Google Sign-In initialization failed", e);
+      } catch (err) {
+        console.error("Google Init Error:", err);
       }
     }
-  }, [step, user]);
+  };
+
+  // 立即執行一次
+  initializeGoogle();
+
+  // 若腳本尚未就緒，每 500ms 嘗試重連，直到按鈕成功渲染或離開該步驟
+  if (step === 2 && !user) {
+    retryTimer = window.setInterval(initializeGoogle, 500);
+  }
+
+  return () => {
+    if (retryTimer) clearInterval(retryTimer);
+  };
+}, [step, user]);
 
   const handlePhotoUpload = (cat: Category, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
