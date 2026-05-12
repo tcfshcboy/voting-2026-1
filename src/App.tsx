@@ -129,7 +129,7 @@ export default function App() {
 
   // Google Login Initialization
   useEffect(() => {
-    if (step === 2 && !user && window.google) {
+    if (step === 2 && !user && window.google?.accounts?.id) {
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: (res: any) => {
@@ -188,8 +188,6 @@ export default function App() {
     };
 
     try {
-      // In a real app, you would send this to your GAS URL
-      // If GOOGLE_SCRIPT_URL is default, we'll log it and mock success
       if (GOOGLE_SCRIPT_URL === "YOUR_GAS_WEB_APP_URL") {
         console.log("Mocking submission to GAS:", payload);
         await new Promise(resolve => setTimeout(resolve, 1500));
@@ -573,10 +571,10 @@ export default function App() {
               </div>
 
               {/* Authentication */}
-              <div className={`p-8 rounded-[2.5rem] border-2 transition-all duration-500 ${
+              <div className={`p-8 rounded-[2.5rem] border-2 transition-all duration-500 relative z-10 ${
                 user 
                   ? 'bg-zinc-900 border-lime-400/20' 
-                  : 'bg-zinc-950 border-lime-400 shadow-[0_0_30px_rgba(163,230,53,0.1)] animate-pulse'
+                  : 'bg-zinc-950 border-lime-400 shadow-[0_0_30px_rgba(163,230,53,0.1)]'
               }`}>
                 <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center gap-3">
@@ -594,10 +592,10 @@ export default function App() {
                 </div>
 
                 {!user ? (
-                  <div className="space-y-6">
+                  <div className="space-y-6 relative z-20">
                     <p className="text-sm text-zinc-500 text-center">請先使用 Google 帳號登入以 TCFSH 身份完成提名。</p>
-                    <div className="flex justify-center group">
-                      <div ref={googleBtnRef} className="transition-transform group-active:scale-95" />
+                    <div className="flex justify-center relative pointer-events-auto">
+                      <div ref={googleBtnRef} className="w-fit" />
                     </div>
                   </div>
                 ) : (
@@ -704,4 +702,3 @@ export default function App() {
     </div>
   );
 }
-
