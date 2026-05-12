@@ -28,8 +28,8 @@ declare global {
 }
 
 // Configuration from environment or defaults
-const GOOGLE_SCRIPT_URL = process.env.VITE_GAS_URL || "YOUR_GAS_WEB_APP_URL";
-const GOOGLE_CLIENT_ID = process.env.VITE_GOOGLE_CLIENT_ID || "YOUR_CLIENT_ID.apps.googleusercontent.com";
+const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GAS_URL || "YOUR_GAS_WEB_APP_URL";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "YOUR_CLIENT_ID.apps.googleusercontent.com";
 
 type Category = '校草' | '校花' | '校猴';
 
