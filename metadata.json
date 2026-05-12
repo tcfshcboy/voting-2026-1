@@ -1,0 +1,6 @@
+{
+  "name": "TCFSH 2026 校園風雲人物提名系統",
+  "description": "臺中一中 2026 校園風雲人物（校草、校花、校猴）提名與票選系統，採用 Google 帳號認證與 GAS 資料串接。",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

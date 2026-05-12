@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-brand-lime: #A3E635;
+  --color-brand-cyan: #22D3EE;
+  --color-background-dark: #09090B;
+}
+
+@layer base {
+  body {
+    @apply bg-background-dark text-zinc-100 antialiased selection:bg-brand-lime/30;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-3xl;
+  }
+  
+  .neo-button {
+    @apply relative px-8 py-4 font-black transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100;
+  }
+}
+
