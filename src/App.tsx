@@ -28,8 +28,8 @@ declare global {
 }
 
 // Configuration from environment or defaults
-const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GAS_URL || "YOUR_GAS_WEB_APP_URL";
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "YOUR_CLIENT_ID.apps.googleusercontent.com";
+const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GAS_URL || "https://script.google.com/macros/s/AKfycbzZt_qlWu_rVg_YnOIsWWlicDGKOVtdKerD_nRjnw80808ApPSsn3ngvGXs0JMcBVk2/exec";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "1003959654198-dlmeohcihgsekr53ufmuel72qg7ungj0.apps.googleusercontent.com";
 
 type Category = '校草' | '校花' | '校猴';
 
