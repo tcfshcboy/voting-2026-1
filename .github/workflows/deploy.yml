@@ -36,6 +36,9 @@ jobs:
         run: npm install --legacy-peer-deps 
       - name: Build
         run: npm run build
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          VITE_GAS_URL: ${{ secrets.VITE_GAS_URL }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
