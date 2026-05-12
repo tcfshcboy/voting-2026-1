@@ -73,6 +73,21 @@ const CATEGORIES: { id: Category; label: string; icon: React.ReactNode; color: s
   },
 ];
 
+// 🌟 移植舊版的安全 JWT 解碼函數 (解決中文姓名 Crash 問題)
+const decodeJwt = (token: string): any => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error("JWT Decode Error", e);
+    return null;
+  }
+};
+
 const checkIdentity = (email: string) => {
   if (!email) return { valid: false, msg: '未登入', type: 'none', label: '', color: '' };
   if (email.toLowerCase().trim().endsWith('@std.tcfsh.tc.edu.tw')) {
@@ -90,7 +105,6 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [showPolicyModal, setShowPolicyModal] = useState(false);
-  const googleBtnRef = useRef<HTMLDivElement>(null);
 
   const toggleCategory = (cat: Category) => {
     setSelectedCats(prev => 
@@ -121,35 +135,45 @@ export default function App() {
         data.grade && 
         data.classNum
       );
-      // Logic: If photo exists, consent must be true
       const consentValid = data.photo ? data.consent : true;
       return basicsValid && consentValid;
     });
   };
 
-  // Google Login Initialization
+  // 🌟 Google Login Initialization (結合舊版的穩定機制)
   useEffect(() => {
     if (step === 2 && !user && window.google?.accounts?.id) {
-      window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: (res: any) => {
-          const payload = JSON.parse(atob(res.credential.split('.')[1]));
-          setUser({ 
-            email: payload.email, 
-            name: payload.name, 
-            picture: payload.picture, 
-            credential: res.credential 
+      try {
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (res: any) => {
+            const decoded = decodeJwt(res.credential);
+            if (decoded) {
+              setUser({ 
+                email: decoded.email, 
+                name: decoded.name, 
+                picture: decoded.picture, 
+                credential: res.credential 
+              });
+            }
+          },
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+
+        // 放棄 useRef，改用舊版的 getElementById 確保抓取正確圖層
+        const btnDiv = document.getElementById("google-signin-btn");
+        if (btnDiv) {
+          btnDiv.innerHTML = '';
+          window.google.accounts.id.renderButton(btnDiv, { 
+            theme: "filled_black", 
+            size: "large", 
+            shape: "pill", 
+            width: "300" 
           });
         }
-      });
-      if (googleBtnRef.current) {
-        googleBtnRef.current.innerHTML = '';
-        window.google.accounts.id.renderButton(googleBtnRef.current, { 
-          theme: "filled_black", 
-          size: "large", 
-          shape: "pill", 
-          width: "300" 
-        });
+      } catch (e) {
+        console.error("Google Sign-In initialization failed", e);
       }
     }
   }, [step, user]);
@@ -594,8 +618,9 @@ export default function App() {
                 {!user ? (
                   <div className="space-y-6 relative z-20">
                     <p className="text-sm text-zinc-500 text-center">請先使用 Google 帳號登入以 TCFSH 身份完成提名。</p>
+                    {/* 🌟 換成舊版的穩定 HTML 結構 */}
                     <div className="flex justify-center relative pointer-events-auto">
-                      <div ref={googleBtnRef} className="w-fit" />
+                      <div id="google-signin-btn" className="h-12 flex justify-center w-[300px]"></div>
                     </div>
                   </div>
                 ) : (
