@@ -37,6 +37,7 @@ interface NomineeData {
   name: string;
   grade: string;
   classNum: string;
+  socialMedia?: string; // 新增這行：社群帳號
   description: string;
   photo?: string | null; // Base64
   consent: boolean;
@@ -118,7 +119,7 @@ export default function App() {
     setFormData(prev => ({
       ...prev,
       [cat]: { 
-        ...(prev[cat] || { name: '', grade: '', classNum: '', description: '', consent: false }), 
+        ...(prev[cat] || { name: '', grade: '', classNum: '', socialMedia: '', description: '', consent: false }), 
         [field]: value 
       }
     }));
@@ -474,6 +475,17 @@ useEffect(() => {
                         </div>
 
                         <div className="md:col-span-2">
+                          <label className={`text-xs font-black uppercase tracking-widest mb-2 block ${themeColor}`}>哀居或脆 (Instagram/Threads) (選填)</label>
+                          <input 
+                            type="text" 
+                            placeholder="輸入帳號，例如：@tcfsh_student"
+                            value={formData[cat]?.socialMedia || ''} 
+                            onChange={e => updateFormData(cat, 'socialMedia', e.target.value)}
+                            className={`w-full bg-zinc-950 border-2 border-zinc-800 rounded-2xl p-4 font-bold text-sm text-zinc-100 ${focusColor} focus:outline-none transition-colors placeholder:text-zinc-700`} 
+                          />
+                        </div>
+
+                        <div className="md:col-span-2">
                           <label className={`text-xs font-black uppercase tracking-widest mb-2 block ${themeColor}`}>提名理由 (選填)</label>
                           <textarea 
                             placeholder="寫下您推薦的理由..."
@@ -606,6 +618,14 @@ useEffect(() => {
                               <p className={`text-xs font-bold uppercase tracking-widest opacity-60 ${themeColor}`}>班級</p>
                               <p className="text-xl font-black text-zinc-100">{formData[cat].classNum} 班</p>
                             </div>
+                            
+                            {formData[cat].socialMedia && (
+                              <div className="col-span-2 space-y-2">
+                                <p className={`text-xs font-bold uppercase tracking-widest opacity-60 ${themeColor}`}>社群帳號 (IG/Threads)</p>
+                                <p className="text-xl font-black text-zinc-100">{formData[cat].socialMedia}</p>
+                              </div>
+                            )}
+
                             {formData[cat].description && (
                               <div className="col-span-2 space-y-2">
                                 <p className={`text-xs font-bold uppercase tracking-widest opacity-60 ${themeColor}`}>提名理由</p>
