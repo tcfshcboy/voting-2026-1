@@ -277,12 +277,22 @@ useEffect(() => {
             <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-cyan-400 mb-2">提名成功！</h1>
             <p className="text-zinc-400 font-mono">提名成功! 提名結果將於5/18(一)公佈，並進入正式票選階段。</p>
           </div>
-          <button 
-            onClick={() => window.location.reload()}
-            className="px-8 py-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors"
-          >
-            返回首頁
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-8 py-3 bg-zinc-900 border border-zinc-800 text-white font-bold rounded-xl hover:border-zinc-700 transition-colors"
+            >
+              返回首頁
+            </button>
+            <a 
+              href="https://script.google.com/macros/s/AKfycbzZt_qlWu_rVg_YnOIsWWlicDGKOVtdKerD_nRjnw80808ApPSsn3ngvGXs0JMcBVk2/exec"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-3 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-black rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center"
+            >
+              提名即時顯示板
+            </a>
+          </div>
         </motion.div>
       </div>
     );
@@ -475,7 +485,7 @@ useEffect(() => {
                         </div>
 
                         <div className="md:col-span-2">
-                          <label className={`text-sm font-semibold tracking-wide mb-2 block ${themeColor}`}>哀居或脆 (Instagram/Threads) (選填)</label>
+                          <label className={`text-xs font-bold tracking-widest mb-2 block normal-case ${themeColor}`}>哀居或脆 (Instagram/Threads) (選填)</label>
                           <input 
                             type="text" 
                             placeholder="輸入帳號，例如：@tcfsh_student"
