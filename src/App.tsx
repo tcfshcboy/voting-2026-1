@@ -475,7 +475,7 @@ useEffect(() => {
                         </div>
 
                         <div className="md:col-span-2">
-                          <label className={`text-xs font-black uppercase tracking-widest mb-2 block ${themeColor}`}>哀居或脆 (Instagram/Threads) (選填)</label>
+                          <label className={`text-sm font-semibold tracking-wide mb-2 block ${themeColor}`}>哀居或脆 (Instagram/Threads) (選填)</label>
                           <input 
                             type="text" 
                             placeholder="輸入帳號，例如：@tcfsh_student"
@@ -665,7 +665,7 @@ useEffect(() => {
 
                 {!user ? (
                   <div className="space-y-6 relative z-20">
-                    <p className="text-sm text-zinc-500 text-center">請先使用 Google 帳號登入以 TCFSH 身份完成提名。</p>
+                    <p className="text-sm text-zinc-500 text-center">請使用 Google 帳號登入以 TCFSH 身份完成提名。</p>
                     {/* 🌟 換成舊版的穩定 HTML 結構 */}
                     <div className="flex justify-center relative pointer-events-auto">
                       <div id="google-signin-btn" className="h-12 flex justify-center w-[300px]"></div>
