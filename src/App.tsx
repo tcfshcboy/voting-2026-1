@@ -275,7 +275,7 @@ useEffect(() => {
           </div>
           <div>
             <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-cyan-400 mb-2">提名成功！</h1>
-            <p className="text-zinc-400 font-mono">感謝您的參與，投票結果將於近期公佈。</p>
+            <p className="text-zinc-400 font-mono">提名成功! 提名結果將於5/18(一)公佈，並進入正式票選階段。</p>
           </div>
           <button 
             onClick={() => window.location.reload()}
@@ -725,7 +725,7 @@ useEffect(() => {
                 <Info size={14} />
                 <button 
                   onClick={() => setShowPolicyModal(true)}
-                  className="text-[10px] font-bold tracking-tight text-lime-400/80 hover:text-lime-400 transition-colors underline decoration-lime-400/30 underline-offset-2"
+                  className="text-[14px] font-bold tracking-tight text-lime-400/80 hover:text-lime-400 transition-colors underline decoration-lime-400/30 underline-offset-2"
                 >
                   送出即代表同意本系統之投票規範與隱私條款
                 </button>
